@@ -1,0 +1,80 @@
+﻿@model PetShopModel.Utiles
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Utiles</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoDeMascota.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoDeMascota.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Img)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Img)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyTime)
+        </dd>
+
+    </dl>
+    <div class="col-xs-12 well">
+        Esto puede ser un _parcialView con consejos
+        <h4>Cómo curar el dolor de estómago en un perro</h4>
+        <em>
+            Es difícil saber cuándo está malo nuestro perro a no ser que haya algún síntoma claro
+            como sangre en sus heces o en alguna otra parte, vómitos, diarrea, o tos. Pero lo cierto
+            es que nuestras mascotas también sufren de dolores, como el dolor de estómago. Por ello
+            si ves que tu perro está comiendo menos, ha perdido el apetito o se pasa el día tumbado sin
+            jugar siendo un perro activo es posible que tenga alguna dolencia. Si le notas algún síntoma
+            o ves que se ha comido algún objeto no deseado lo indicado es que le lleves al veterinario.
+            Si no puedes llevarle inmediatamente o para aliviar esta dolencia, en un COMO te vamos a contar
+            cómo curar el dolor de estómago en un perro.
+        </em>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
