@@ -18,7 +18,7 @@ namespace PetShopWeb.Controllers
     public class MascotasController : Controller
     {
         private ContextModel db = new ContextModel();
-        
+
 
         // GET: Mascotas
         [AllowAnonymous]
@@ -27,8 +27,11 @@ namespace PetShopWeb.Controllers
             #region Test
             //var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+
             //roleManager.Create(new IdentityRole("admin"));
-            //var test = db.Mascotas.Include(m => m.TipoDeMascota).ToString(); 
+            //var users = userManager.Users.Select(u => u.UserName).ToList();
+
+            //var test = db.Mascotas.Include(m => m.TipoDeMascota).ToString();
             #endregion
 
             var cantidadRegistrosPorPagina = 6; // parámetro
@@ -97,17 +100,21 @@ namespace PetShopWeb.Controllers
         // GET: Mascotas/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.IsInRole("admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Mascota mascota = db.Mascotas.Find(id);
+                if (mascota == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name", mascota.IdTipo);
+                return View(mascota);
             }
-            Mascota mascota = db.Mascotas.Find(id);
-            if (mascota == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name", mascota.IdTipo);
-            return View(mascota);
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Mascotas/Edit/5
@@ -130,16 +137,20 @@ namespace PetShopWeb.Controllers
         // GET: Mascotas/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.IsInRole("admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Mascota mascota = db.Mascotas.Find(id);
+                if (mascota == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(mascota);
             }
-            Mascota mascota = db.Mascotas.Find(id);
-            if (mascota == null)
-            {
-                return HttpNotFound();
-            }
-            return View(mascota);
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Mascotas/Delete/5
@@ -168,7 +179,7 @@ namespace PetShopWeb.Controllers
             modelo.TotalDeRegistros = totalDeRegistros;
             modelo.RegistrosPorPagina = 6;
 
-            return View("Index", modelo);            
+            return View("Index", modelo);
         }
 
         protected override void Dispose(bool disposing)

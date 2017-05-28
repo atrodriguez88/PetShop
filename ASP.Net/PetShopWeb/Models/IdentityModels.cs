@@ -29,5 +29,7 @@ namespace PetShopWeb.Models
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<PetShopWeb.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

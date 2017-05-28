@@ -57,8 +57,12 @@ namespace PetShopWeb.Controllers
         // GET: Utiles/Create
         public ActionResult Create()
         {
-            ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name");
-            return View();
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name");
+                return View();
+            }
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Utiles/Create
@@ -82,17 +86,21 @@ namespace PetShopWeb.Controllers
         // GET: Utiles/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.IsInRole("admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Utiles utiles = db.UtilesS.Find(id);
+                if (utiles == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name", utiles.IdTipo);
+                return View(utiles);
             }
-            Utiles utiles = db.UtilesS.Find(id);
-            if (utiles == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name", utiles.IdTipo);
-            return View(utiles);
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Utiles/Edit/5
@@ -115,16 +123,20 @@ namespace PetShopWeb.Controllers
         // GET: Utiles/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.IsInRole("admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Utiles utiles = db.UtilesS.Find(id);
+                if (utiles == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(utiles);
             }
-            Utiles utiles = db.UtilesS.Find(id);
-            if (utiles == null)
-            {
-                return HttpNotFound();
-            }
-            return View(utiles);
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Utiles/Delete/5

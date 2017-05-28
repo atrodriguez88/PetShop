@@ -60,8 +60,12 @@ namespace PetShopWeb.Controllers
         // GET: Alimentoes/Create
         public ActionResult Create()
         {
-            ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name");
-            return View();
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name");
+                return View();
+            }
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Alimentoes/Create
@@ -70,7 +74,7 @@ namespace PetShopWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Cost,Price,Description,IdTipo")] Alimento alimento)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 alimento.BuyTime = DateTime.Now;
@@ -86,17 +90,21 @@ namespace PetShopWeb.Controllers
         // GET: Alimentoes/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.IsInRole("admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Alimento alimento = db.Alimentos.Find(id);
+                if (alimento == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name", alimento.IdTipo);
+                return View(alimento);
             }
-            Alimento alimento = db.Alimentos.Find(id);
-            if (alimento == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdTipo = new SelectList(db.TipoDeMascotas, "IdTipo", "Name", alimento.IdTipo);
-            return View(alimento);
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Alimentoes/Edit/5
@@ -120,16 +128,20 @@ namespace PetShopWeb.Controllers
         // GET: Alimentoes/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.IsInRole("admin"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Alimento alimento = db.Alimentos.Find(id);
+                if (alimento == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(alimento);
             }
-            Alimento alimento = db.Alimentos.Find(id);
-            if (alimento == null)
-            {
-                return HttpNotFound();
-            }
-            return View(alimento);
+            return RedirectToAction("Register", "Account");
         }
 
         // POST: Alimentoes/Delete/5
