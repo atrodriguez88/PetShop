@@ -60,20 +60,23 @@ namespace PetShopWeb.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.Values.ElementAt(0).Value.AttemptedValue !="" &&
-                    ModelState.Values.ElementAt(1).Value.AttemptedValue != "")
+                    ModelState.Values.ElementAt(1).Value.AttemptedValue != "" &&
+                    ModelState.Values.ElementAt(2).Value.AttemptedValue != "")
                 {
                     using (ApplicationDbContext db = new ApplicationDbContext())
                     {
                         var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
                         var user = new ApplicationUser() {
-                            UserName = control.ApplicationUser.UserName,
+                            UserName = control.username,
                     };
-                        var result = userManager.Create(user, control.ApplicationUser.PasswordHash);                        
+                        var result = userManager.Create(user, control.password);     
+                                         
                         if (result.Succeeded)
                         {
-                            var result2 = userManager.AddToRole(control.ApplicationUser.Id, control.Rol);
+                            var result2 = userManager.AddToRole(userManager.FindByName(user.UserName).Id, control.Rol);
                             return RedirectToAction("Index");
                         }
+
                         var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
                         ViewBag.Rol = new SelectList(roleManager.Roles.Select(r => r.Name).ToList());
                         return View(control);
@@ -88,16 +91,38 @@ namespace PetShopWeb.Controllers
         // GET: ApplicationUsers/Edit/5
         public ActionResult Edit(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                using (var db = new ApplicationDbContext())
+                {
+                    if (id == null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    }
+                    if (db.Users.Find(id) == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    else
+                    {
+                        var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+                        var control = new ControlViewModel()
+                        {
+                            email = db.Users.Find(id).Email,
+                            //password = db.Users.Find(id).PasswordHash,
+                            username = db.Users.Find(id).UserName,
+                            Rol = roleManager.FindById(db.Users.Find(id).Roles.FirstOrDefault().RoleId).Name
+                        };
+                        ViewBag.Rol = new SelectList(roleManager.Roles.Select(r => r.Name).ToList());
+                        return View(control);
+                    }
+                }
             }
-            ApplicationUser applicationUser = db.Users.Find(id);
-            if (applicationUser == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                ex.Message.ToString();
+                return RedirectToAction("Index");
             }
-            return View(applicationUser);
         }
 
         // POST: ApplicationUsers/Edit/5
@@ -105,35 +130,35 @@ namespace PetShopWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserName,PasswordHash")] ApplicationUser applicationUser)
-        {
-                db.Entry(applicationUser).State = EntityState.Modified;
-                db.SaveChanges();
-            //**********************************************
-            if (User.Identity.IsAuthenticated)
-            {
-                if (ModelState.Values.ElementAt(0).Value.AttemptedValue != "" &&
-                    ModelState.Values.ElementAt(1).Value.AttemptedValue != "")
-                {
-                    using (ApplicationDbContext db = new ApplicationDbContext())
-                    {
-                        var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+        //public ActionResult Edit(ControlViewModel control)
+        //{
+        //        db.Entry(applicationUser).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //    //**********************************************
+        //    if (User.Identity.IsAuthenticated)
+        //    {
+        //        if (ModelState.Values.ElementAt(0).Value.AttemptedValue != "" &&
+        //            ModelState.Values.ElementAt(1).Value.AttemptedValue != "")
+        //        {
+        //            using (ApplicationDbContext db = new ApplicationDbContext())
+        //            {
+        //                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
                                                 
-                        var user = userManager.FindById(applicationUser.Id);
-                        user.Email = applicationUser.Email;
-                        user.PhoneNumber = applicationUser.PhoneNumber;
-                        //user.Roles = applicationUser.Roles;
-                       // if (result.Succeeded)
-                        {
-                            return RedirectToAction("Index");
-                        }
-                        return View(applicationUser);
-                    }
-                }
-                return View(applicationUser);
-            }
-            return RedirectToAction("Register", "Account");
-        }
+        //                var user = userManager.FindById(applicationUser.Id);
+        //                user.Email = applicationUser.Email;
+        //                user.PhoneNumber = applicationUser.PhoneNumber;
+        //                //user.Roles = applicationUser.Roles;
+        //               // if (result.Succeeded)
+        //                {
+        //                    return RedirectToAction("Index");
+        //                }
+        //                return View(applicationUser);
+        //            }
+        //        }
+        //        return View(applicationUser);
+        //    }
+        //    return RedirectToAction("Register", "Account");
+        //}
 
         // GET: ApplicationUsers/Delete/5
         public ActionResult Delete(string id)
