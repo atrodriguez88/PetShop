@@ -9,6 +9,7 @@ namespace PetShopWeb.ViewModels
 {
     public class ControlViewModel
     {
+        public string id { get; set; }
         [StringLength(20)]
         [Required]
         public string username { get; set; }

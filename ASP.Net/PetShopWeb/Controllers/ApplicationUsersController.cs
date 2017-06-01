@@ -13,7 +13,7 @@ using PetShopWeb.ViewModels;
 
 namespace PetShopWeb.Controllers
 {
-    //[Authorize(Roles ="super")]
+    [Authorize(Roles ="super")]
     [RoutePrefix("Control")]
     public class ApplicationUsersController : Controller
     {
@@ -59,18 +59,19 @@ namespace PetShopWeb.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                if (ModelState.Values.ElementAt(0).Value.AttemptedValue !="" &&
+                if (ModelState.Values.ElementAt(0).Value.AttemptedValue != "" &&
                     ModelState.Values.ElementAt(1).Value.AttemptedValue != "" &&
                     ModelState.Values.ElementAt(2).Value.AttemptedValue != "")
                 {
                     using (ApplicationDbContext db = new ApplicationDbContext())
                     {
                         var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-                        var user = new ApplicationUser() {
+                        var user = new ApplicationUser()
+                        {
                             UserName = control.username,
-                    };
-                        var result = userManager.Create(user, control.password);     
-                                         
+                        };
+                        var result = userManager.Create(user, control.password);
+
                         if (result.Succeeded)
                         {
                             var result2 = userManager.AddToRole(userManager.FindByName(user.UserName).Id, control.Rol);
@@ -85,7 +86,7 @@ namespace PetShopWeb.Controllers
                 return RedirectToAction("Create");
             }
             return RedirectToAction("Register", "Account");
-            
+
         }
 
         // GET: ApplicationUsers/Edit/5
@@ -130,35 +131,38 @@ namespace PetShopWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public ActionResult Edit(ControlViewModel control)
-        //{
-        //        db.Entry(applicationUser).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //    //**********************************************
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        if (ModelState.Values.ElementAt(0).Value.AttemptedValue != "" &&
-        //            ModelState.Values.ElementAt(1).Value.AttemptedValue != "")
-        //        {
-        //            using (ApplicationDbContext db = new ApplicationDbContext())
-        //            {
-        //                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-                                                
-        //                var user = userManager.FindById(applicationUser.Id);
-        //                user.Email = applicationUser.Email;
-        //                user.PhoneNumber = applicationUser.PhoneNumber;
-        //                //user.Roles = applicationUser.Roles;
-        //               // if (result.Succeeded)
-        //                {
-        //                    return RedirectToAction("Index");
-        //                }
-        //                return View(applicationUser);
-        //            }
-        //        }
-        //        return View(applicationUser);
-        //    }
-        //    return RedirectToAction("Register", "Account");
-        //}
+        public ActionResult Edit(ControlViewModel control)
+        {
+            //db.Entry(control).State = EntityState.Modified;
+            //db.SaveChanges();
+            //**********************************************
+            if (User.Identity.IsAuthenticated)
+            {
+                if (ModelState.Values.ElementAt(1).Value.AttemptedValue != "")
+                {
+                    using (ApplicationDbContext db = new ApplicationDbContext())
+                    {
+                        if (control.id != null)
+                        {
+                            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+
+                            var user = userManager.FindById(control.id);
+                            user.Email = control.email;
+                            user.UserName = control.username;
+                            roleManager.FindById(control.id).Name = control.Rol;
+                            if (control.password != "")
+                            {
+                                user.PasswordHash = control.password;
+                            }
+                        }
+                        return RedirectToAction("Index");
+                    }
+                }
+                return View(control);
+            }
+            return RedirectToAction("Register", "Account");
+        }
 
         // GET: ApplicationUsers/Delete/5
         public ActionResult Delete(string id)
@@ -167,12 +171,16 @@ namespace PetShopWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApplicationUser applicationUser = db.Users.Find(id);
-            if (applicationUser == null)
+            using (var db = new ApplicationDbContext())
             {
-                return HttpNotFound();
+                ApplicationUser applicationUser = db.Users.Find(id);
+                if (applicationUser == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(applicationUser);
             }
-            return View(applicationUser);
+
         }
 
         // POST: ApplicationUsers/Delete/5
@@ -180,12 +188,16 @@ namespace PetShopWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            ApplicationUser applicationUser = db.Users.Find(id);
-            db.Users.Remove(applicationUser);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var db = new ApplicationDbContext())
+            {
+                ApplicationUser applicationUser = db.Users.Find(id);
+                db.Users.Remove(applicationUser);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
         }
 
+        [HttpGet]
         public ActionResult AddRol()
         {
             return View();
@@ -200,9 +212,20 @@ namespace PetShopWeb.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
-
-                roleManager.Create(new IdentityRole(roleName));
+                if (roleName == null)
+                {
+                    return View();
+                }
+                using (var db = new ApplicationDbContext())
+                {
+                    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+                    if (roleManager.RoleExists(roleName))
+                    {                        
+                        ViewBag.Error = roleName + "was already in the system";
+                        return View();
+                    }
+                    roleManager.Create(new IdentityRole(roleName));
+                }
             }
             return RedirectToAction("Index");
         }
