@@ -152,6 +152,7 @@ namespace PetShopWeb.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                //Here I can cryptar de pass whit sal - some method create
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

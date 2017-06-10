@@ -1,0 +1,16 @@
+﻿@model List<string>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var item in Model)
+            {               
+                <tr>
+                    <td>@item</td>
+                </tr>   
+            }
+    </tbody>
+</table>

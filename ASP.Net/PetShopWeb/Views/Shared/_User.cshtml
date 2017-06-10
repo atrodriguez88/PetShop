@@ -1,0 +1,26 @@
+﻿
+@model List<PetShopWeb.ViewModels.ControlViewModel>
+
+<table class="table-striped">
+    <thead>
+        <tr>
+            <th>User Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Ajax.ActionLink(item.username, "userDetail", new { user = item.username }, new AjaxOptions
+               {
+                   HttpMethod = "GET",
+                   InsertionMode = InsertionMode.Replace,
+                   UpdateTargetId = "Deta"
+               })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="Deta"></div>

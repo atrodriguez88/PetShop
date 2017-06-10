@@ -10,6 +10,8 @@ using PetShopWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PetShopWeb.ViewModels;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace PetShopWeb.Controllers
 {
@@ -23,7 +25,7 @@ namespace PetShopWeb.Controllers
         [Route("")]
         [Route("Index")]
         public ActionResult Index()
-        {
+        { 
             return View(db.Users.ToList());
         }
 
@@ -39,6 +41,13 @@ namespace PetShopWeb.Controllers
             {
                 return HttpNotFound();
             }
+
+            ////Referencia Directa Insegura
+            //var userId = User.Identity.GetUserId();
+            //if (applicationUser.Id != userId)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
             return View(applicationUser);
         }
 
@@ -100,10 +109,16 @@ namespace PetShopWeb.Controllers
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                     }
-                    if (db.Users.Find(id) == null)
+                    var user = db.Users.Find(id);
+                    if (user == null)
                     {
                         return HttpNotFound();
                     }
+                    ////Referencia Directa Insegura
+                    //if (user.Id != User.Identity.GetUserId())
+                    //{
+                    //    return RedirectToAction("Login", "Account");
+                    //}
                     else
                     {
                         var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));

@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Utility";
+}
+
+<h2>Utility</h2>
+
+<div>
+    <input type="text" id="kg" placeholder="Kilograms"/>
+    <input type="button" id="btn" value="Pound?" />
+    <div id="result">
+        <div id="mgs"></div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $("#btn").click(function () {
+            var url = "@Url.Action("Calculo","Home")";
+            var weight = $("#id").val();
+            var data = { peso : weight};
+            $.post(url, data).done(function (data) {
+                if (data.Ok) {
+                    $("#result").removeClass("alert-danger").addClass("alert-success").slideDown(2000);
+                }
+                else {
+                    $("#result").removeClass("alert-success").addClass("alert-danger").slideDown(2000);
+                }
+                $("#mgs").html(data);
+            }).fail(
+                console.log("Error")
+            );
+        });
+    </script>
+}
