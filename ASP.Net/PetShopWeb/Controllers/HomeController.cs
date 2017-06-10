@@ -154,6 +154,7 @@ namespace PetShopWeb.Controllers
                 return PartialView("_User", obj);
             }            
         }
+        
         public PartialViewResult userDetail(string user)
         {
             using (ApplicationDbContext db = new ApplicationDbContext())

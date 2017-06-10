@@ -14,6 +14,8 @@ namespace PetShopWeb
             routes.MapMvcAttributeRoutes();
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("Home/ActionLink");
+            routes.IgnoreRoute("Home/userDetail");
 
             routes.MapRoute(
                 name: "Default",
