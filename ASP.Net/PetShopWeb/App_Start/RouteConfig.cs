@@ -17,6 +17,12 @@ namespace PetShopWeb
             routes.IgnoreRoute("Home/ActionLink");
             routes.IgnoreRoute("Home/userDetail");
 
+            //Example: How can pass many parameter on URL
+            routes.MapRoute(
+                name: "Mascota-Por-Raza",
+                url: "Mascotas/Raza/{*generos}",
+                defaults: new { controller = "Mascotas", action = "FindBy" }
+            );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

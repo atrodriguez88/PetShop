@@ -14,12 +14,14 @@ using PetShopModel;
 
 namespace PetShopWeb.Controllers
 {
+    [RoutePrefix("Mascotas")]
     [Authorize()]
     public class MascotasController : Controller
     {
         private ContextModel db = new ContextModel();
 
-
+        [Route("")]
+        [Route("Index")]
         // GET: Mascotas
         [AllowAnonymous]
         public ActionResult Index(int pagina = 1)
@@ -181,7 +183,50 @@ namespace PetShopWeb.Controllers
 
             return View("Index", modelo);
         }
+        [Route("Raza")]
+        [Route("Raza/{generos}")]
+        [AllowAnonymous]
+        public ActionResult FindBy(string generos = "all")
+        {
+            var array = generos.Split('/');
+            
 
+            var result = new List<Mascota>();
+            if (generos == "all")
+            {
+                var all = db.Mascotas.Include(m => m.TipoDeMascota).ToList();
+                result.AddRange(all);
+            }
+            for (int i = 0; i < array.Length; i++)
+            {
+                string type = array[i].ToString();
+                if (type.ToLower() == "dog")
+                {
+                    var dog = db.Mascotas.Include(m => m.TipoDeMascota).Where(s => s.TipoDeMascota.Name == type).ToList();
+                    result.AddRange(dog);
+                }
+                if (type.ToLower() == "cat")
+                {
+                    var cat = db.Mascotas.Include(m => m.TipoDeMascota).Where(s => s.TipoDeMascota.Name == type).ToList();
+                    result.AddRange(cat);
+                }
+                if (type.ToLower() == "ave")
+                {
+                    var ave = db.Mascotas.Include(m => m.TipoDeMascota).Where(s => s.TipoDeMascota.Name == type).ToList();
+                    result.AddRange(ave);
+                }
+            }
+
+            var totalDeRegistros = result.Count();
+
+            var modelo = new ViewModels.IndexViewModel();
+            modelo.Mascotas = result;
+            modelo.PaginaActual = 1;
+            modelo.TotalDeRegistros = totalDeRegistros;
+            modelo.RegistrosPorPagina = 6;
+
+            return View(modelo);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

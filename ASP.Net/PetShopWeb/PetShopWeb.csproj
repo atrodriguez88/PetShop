@@ -280,6 +280,8 @@
     <Content Include="Views\Home\Boletin.cshtml" />
     <Content Include="Views\Shared\_User.cshtml" />
     <Content Include="Views\Shared\_UserDetail.cshtml" />
+    <Content Include="Views\Shared\_FindBy.cshtml" />
+    <Content Include="Views\Mascotas\FindBy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

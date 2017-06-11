@@ -14,9 +14,9 @@ namespace PetShopWeb.Controllers
     [RoutePrefix("Home")]
     public class HomeController : Controller
     {
-        [Route("~/")]
-        [Route("")]
-        [Route("Index")]
+        [Route("~/")] // Dominio
+        [Route("")] // Dominio/Home
+        [Route("Index")] // Dominio/Home/index
         public ActionResult Index()
         {            
             ViewBag.Title = "PetShop";            
