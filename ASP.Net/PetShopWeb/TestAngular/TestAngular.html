@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Pangolin" rel="stylesheet">
+    <script src="angular.min.js"></script>
+    <script src="js.js"></script>
+    <style>
+        body {
+            font-family: 'Pangolin', cursive;
+        }
+
+        .arrowDown {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 2px;
+            vertical-align: middle;
+            border-top: 4px solid #000;
+            border-right: 4px solid transparent;
+            border-bottom: 0 dotted;
+            border-left: 4px solid transparent;
+            content: "";
+        }
+
+        .arrowUp {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 2px;
+            vertical-align: middle;
+            border-top: 4px solid #000;
+            border-right: 4px solid transparent;
+            border-bottom: 0 dotted;
+            border-left: 4px solid transparent;
+            content: "";
+        }
+    </style>
+</head>
+<body ng-app="myapp">
+    <div class="container">
+        <!--Section1-->
+        <div class="row">
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <input type="number" step="1" min="1" max="3" ng-model="step" />
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | limitTo:2:step">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yyyy" }}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <select ng-model="sortOrder">
+                        <option value="+name">Name ASC</option>
+                        <option value="-name">Name DES</option>
+                        <option value="Date">Date</option>
+                        <option value="PIB">PIB</option>
+                    </select>
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | orderBy:sortOrder">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yy" }}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--Section2-->
+        <hr />
+        <div class="row">
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th ng-click="changeSort('name')">
+                                    Name<span ng-class="changeClass('name')"></span>
+                                </th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | orderBy:sortColmn:reverseSort">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yy" }}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <input type="search" ng-model="search.name" placeholder="Find name" />
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | filter:search">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yy" }}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--Section3-->
+        <hr />
+        <div class="row">
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <input type="search" ng-model="search.name" placeholder="Find name" />
+                    <input type="search" ng-model="search.PIB" placeholder="Find PIB" />
+                    <input type="checkbox" ng-model="exactMach"> Exact Mach
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | filter:search:exactMach">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yy" }}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <input type="search" ng-model="searchText" placeholder="Find name & City" />
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>City</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | filter:search2">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yy" }}</td>
+                                <td>{{contry.city}}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>                                
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--Section4-->
+        <hr />
+        <!--Costumer Filter-->
+        <div class="row">
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>State</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.state | customerFilter}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div ng-controller="mycontroller">
+                    <input type="search" ng-model="searchText" placeholder="Find name & City" />
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>PIB</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>City</th>
+                                <th>Like</th>
+                                <th>Dislike</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="contry in contries | filter:search2">
+                                <td>{{contry.name | uppercase}}</td>
+                                <td>{{contry.PIB | number:2 }}</td>
+                                <td>{{contry.PIB | currency:$:1 }}</td>
+                                <td>{{contry.Date | date:"dd/MM/yy" }}</td>
+                                <td>{{contry.city}}</td>
+                                <td>{{contry.like}}</td>
+                                <td>{{contry.dislike}}</td>
+                                <td><input type="button" value="Like" ng-click="Like(contry)" /></td>
+                                <td><input type="button" value="Dislike" ng-click="DisLike(contry)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

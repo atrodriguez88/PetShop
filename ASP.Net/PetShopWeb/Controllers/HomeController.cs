@@ -4,8 +4,10 @@ using PetShopWeb.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -17,9 +19,10 @@ namespace PetShopWeb.Controllers
         [Route("~/")] // Dominio
         [Route("")] // Dominio/Home
         [Route("Index")] // Dominio/Home/index
+        //At Last I use Paralelismo and async
         public ActionResult Index()
-        {            
-            ViewBag.Title = "PetShop";            
+        {
+            ViewBag.Title = "PetShop";
             return View();
 
             #region Consumiendo Store Procedure
@@ -59,7 +62,7 @@ namespace PetShopWeb.Controllers
 
             return View();
         }
-        
+
         public ActionResult Contact()
         {
             Persona persona = new Persona()
@@ -91,17 +94,19 @@ namespace PetShopWeb.Controllers
             return View();
         }
 
-        public ActionResult Boletin() {
+        public ActionResult Boletin()
+        {
             ViewBag.Message = "Information Boletin";
             return View();
         }
 
         public JsonResult Calculo(string peso)
         {
-            
+
             try
             {
-                var resul = new {
+                var resul = new
+                {
                     res = double.Parse(peso) * 2.17,
                     Ok = true
                 };
@@ -118,7 +123,8 @@ namespace PetShopWeb.Controllers
             }
         }
 
-        public PartialViewResult Data() {
+        public PartialViewResult Data()
+        {
             var datas = new List<string>() { };
             datas.Add("1 Kg"); datas.Add("1 lb"); datas.Add("16 Oz");
 
@@ -126,7 +132,8 @@ namespace PetShopWeb.Controllers
 
         }
 
-        public JsonResult Form1(string txtCal) {
+        public JsonResult Form1(string txtCal)
+        {
             Thread.Sleep(2000);
             bool IsEmail = new EmailAddressAttribute().IsValid(txtCal);
             if (IsEmail)
@@ -141,7 +148,7 @@ namespace PetShopWeb.Controllers
             //var datas = new List<string>() { };
             //datas.Add("1 Kg"); datas.Add("1 lb"); datas.Add("16 Oz");
 
-            using (ApplicationDbContext db =new ApplicationDbContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 var user = db.Users.Select(u => u.UserName).ToList();
                 List<ControlViewModel> obj = new List<ControlViewModel>();
@@ -152,9 +159,9 @@ namespace PetShopWeb.Controllers
                     obj.Add(control);
                 }
                 return PartialView("_User", obj);
-            }            
+            }
         }
-        
+
         public PartialViewResult userDetail(string user)
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
@@ -170,6 +177,46 @@ namespace PetShopWeb.Controllers
         {
             public string Name { get; set; }
             public DateTime Nacimento { get; set; }
-        }       
+        }
+
+        public async Task<ActionResult> ParalelismoProces()
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var p1 = Process1();
+            var p2 = Process2("Ariel");
+
+            await Task.WhenAll(p1,p2);
+
+            stopWatch.Stop();
+
+            ViewBag.Process1 = p1.Result;
+            ViewBag.Process2 = p2.Result;
+            ViewBag.Time = stopWatch.ElapsedMilliseconds / 1000.0;
+            return View();
+        }
+        public async Task<int> Process1()
+        {
+            
+            return await Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+                return 23;
+            });
+        }
+        public async Task<string> Process2(string name)
+        {
+            
+            return await Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+                return name;
+            }).ContinueWith((name1) =>
+            {
+                string res = $"Hi " + name1.Result +" ...Good Morning";
+                return res;
+            });
+        }
     }
 }

@@ -30,6 +30,10 @@ namespace PetShopWeb.Models
             return new ApplicationDbContext();
         }
 
+        public System.Data.Entity.DbSet<PetShopWeb.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        public System.Data.Entity.DbSet<PetShopModel.Cliente> Clientes { get; set; }
+
         //public System.Data.Entity.DbSet<PetShopWeb.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

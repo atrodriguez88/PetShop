@@ -24,6 +24,7 @@ namespace PetShopWeb.Controllers
         [Route("Index")]
         // GET: Mascotas
         [AllowAnonymous]
+        [OutputCache(CacheProfile ="",Duration=60, Location =System.Web.UI.OutputCacheLocation.Any,VaryByParam = "pagina")]
         public ActionResult Index(int pagina = 1)
         {
             #region Test
@@ -92,6 +93,10 @@ namespace PetShopWeb.Controllers
             {
                 db.Mascotas.Add(mascota);
                 db.SaveChanges();
+
+                string path = Url.Action("index");
+                Response.RemoveOutputCacheItem(path);
+
                 return RedirectToAction("Index");
             }
 

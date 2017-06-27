@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShopModel", "PetShopMode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{013ADD86-C0D0-4256-9531-2AFBADF8E3B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackerRank", "HackerRank\HackerRank.csproj", "{ED52F740-606E-49FE-9277-97778FDD7C12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{013ADD86-C0D0-4256-9531-2AFBADF8E3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013ADD86-C0D0-4256-9531-2AFBADF8E3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013ADD86-C0D0-4256-9531-2AFBADF8E3B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED52F740-606E-49FE-9277-97778FDD7C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED52F740-606E-49FE-9277-97778FDD7C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED52F740-606E-49FE-9277-97778FDD7C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED52F740-606E-49FE-9277-97778FDD7C12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
