@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackerRank", "HackerRank\HackerRank.csproj", "{ED52F740-606E-49FE-9277-97778FDD7C12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{9FB3C6F2-DCE6-48B5-93B0-98F2D4205909}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{ED52F740-606E-49FE-9277-97778FDD7C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED52F740-606E-49FE-9277-97778FDD7C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED52F740-606E-49FE-9277-97778FDD7C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB3C6F2-DCE6-48B5-93B0-98F2D4205909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB3C6F2-DCE6-48B5-93B0-98F2D4205909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB3C6F2-DCE6-48B5-93B0-98F2D4205909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB3C6F2-DCE6-48B5-93B0-98F2D4205909}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

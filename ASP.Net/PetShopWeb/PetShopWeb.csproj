@@ -1003,7 +1003,10 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="TestAngular\angular.min.js" />
     <Content Include="TestAngular\js.js" />
-    <Content Include="TestAngular\TestAngular.html" />
+    <Content Include="TestAngular\factory.js" />
+    <Content Include="TestAngular\js1.js" />
+    <Content Include="TestAngular\ServiceFactoryAngular.html" />
+    <Content Include="TestAngular\TestAngularTablas.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

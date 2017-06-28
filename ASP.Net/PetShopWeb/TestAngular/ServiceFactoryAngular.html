@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="angular.min.js"></script>
+    <script src="js1.js"></script>
+</head>
+<body ng-app="myapp2">
+    <table ng-controller="myController2">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Nota
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="succ  in success">
+                <td>{{succ}}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

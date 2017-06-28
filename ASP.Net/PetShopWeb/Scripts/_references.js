@@ -21,4 +21,6 @@
 /// <reference path="modernizr-2.6.2.js" />
 /// <reference path="respond.js" />
 /// <reference path="../testangular/angular.min.js" />
+/// <reference path="../testangular/factory.js" />
 /// <reference path="../testangular/js.js" />
+/// <reference path="../testangular/js1.js" />
